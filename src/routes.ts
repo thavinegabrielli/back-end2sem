@@ -18,6 +18,7 @@ router.get("/", (req: Request, res: Response) => {
 // Rota para listar os carros
 router.get("/lista/carros", CarroController.todos);
 router.post("/novo/carro", CarroController.novo);
+router.delete("/delete/carro/:idCarro",CarroController.remover);
 
 /* 
 * ROTAS PARA CLIENTES
@@ -25,6 +26,7 @@ router.post("/novo/carro", CarroController.novo);
 // Rota para listar os clientes
 router.get("/lista/clientes", ClienteController.todos);
 router.post("/novo/cliente", ClienteController.novo);
+router.delete("/delete/cliente/:idCliente", ClienteController.remover);
 
 /* 
 * ROTAS PARA PEDIDOS

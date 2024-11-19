@@ -1,4 +1,4 @@
-import { DatabaseModel  } from "./DatababeModel";
+import { DatabaseModel } from "./DataBaseModel";
 
 // armazenei o pool de conexões
 const database = new DatabaseModel().pool;
@@ -39,6 +39,7 @@ export class Carro {
         this.ano = ano;
         this.cor = cor;
     }
+
 
     /* Métodos get e set */
     /**
@@ -131,12 +132,12 @@ export class Carro {
 
     /**
      * Busca e retorna uma lista de carros do banco de dados.
-     * @returns Um array de objetos do tipo `Carro` em caso de sucesso ou `null` se ocorrer um erro durante a consulta.
+     * @returns Um array de objetos do tipo Carro em caso de sucesso ou null se ocorrer um erro durante a consulta.
      * 
      * - A função realiza uma consulta SQL para obter todas as informações da tabela "carro".
-     * - Os dados retornados do banco de dados são usados para instanciar objetos da classe `Carro`.
+     * - Os dados retornados do banco de dados são usados para instanciar objetos da classe Carro.
      * - Cada carro é adicionado a uma lista que será retornada ao final da execução.
-     * - Se houver falha na consulta ao banco, a função captura o erro, exibe uma mensagem no console e retorna `null`.
+     * - Se houver falha na consulta ao banco, a função captura o erro, exibe uma mensagem no console e retorna null.
      */
     static async listagemCarros(): Promise<Array<Carro> | null> {
         // objeto para armazenar a lista de carros
@@ -174,18 +175,20 @@ export class Carro {
         }
     }
 
+
+
     /**
      * Realiza o cadastro de um carro no banco de dados.
      * 
-     * Esta função recebe um objeto do tipo `Carro` e insere seus dados (marca, modelo, ano e cor)
-     * na tabela `carro` do banco de dados. O método retorna um valor booleano indicando se o cadastro 
+     * Esta função recebe um objeto do tipo Carro e insere seus dados (marca, modelo, ano e cor)
+     * na tabela carro do banco de dados. O método retorna um valor booleano indicando se o cadastro 
      * foi realizado com sucesso.
      * 
-     * @param {Carro} carro - Objeto contendo os dados do carro que será cadastrado. O objeto `Carro`
-     *                        deve conter os métodos `getMarca()`, `getModelo()`, `getAno()` e `getCor()`
+     * @param {Carro} carro - Objeto contendo os dados do carro que será cadastrado. O objeto Carro
+     *                        deve conter os métodos getMarca(), getModelo(), getAno() e getCor()
      *                        que retornam os respectivos valores do carro.
-     * @returns {Promise<boolean>} - Retorna `true` se o carro foi cadastrado com sucesso e `false` caso contrário.
-     *                               Em caso de erro durante o processo, a função trata o erro e retorna `false`.
+     * @returns {Promise<boolean>} - Retorna true se o carro foi cadastrado com sucesso e false caso contrário.
+     *                               Em caso de erro durante o processo, a função trata o erro e retorna false.
      * 
      * @throws {Error} - Se ocorrer algum erro durante a execução do cadastro, uma mensagem de erro é exibida
      *                   no console junto com os detalhes do erro.
@@ -220,6 +223,26 @@ export class Carro {
             // imprime o erro no console
             console.log(error);
             // retorno um valor falso
+            return false;
+        }
+    }
+    static async removerCarro(idCarro: number): Promise<boolean> {
+        try{
+            const queryDeleteCarro = `DELETE FROM carro WHERE id_carro = ${idCarro}`;
+
+            const respostaBD = await database.query(queryDeleteCarro);
+
+            if(respostaBD.rowCount != 0) {
+
+                console.log(`Carro removido com sucesso. ID removido: ${idCarro}`);
+
+                return true;
+            }
+            return false;
+
+        } catch (error) {
+            console.log(`Erro ao remeover carro. Verifique os logs para mais detalhes.`);
+            console.log(error);
             return false;
         }
     }

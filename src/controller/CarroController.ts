@@ -9,10 +9,10 @@ interface CarroDTO {
 }
 
 /**
- * A classe `CarroController` estende a classe `Carro` e é responsável por controlar as requisições relacionadas aos carros.
+ * A classe CarroController estende a classe Carro e é responsável por controlar as requisições relacionadas aos carros.
  * 
  * - Esta classe atua como um controlador dentro de uma API REST, gerenciando as operações relacionadas ao recurso "carro".
- * - Herdando de `Carro`, ela pode acessar métodos e propriedades da classe base.
+ * - Herdando de Carro, ela pode acessar métodos e propriedades da classe base.
  */
 export class CarroController extends Carro {
 
@@ -39,15 +39,17 @@ export class CarroController extends Carro {
         }
     }
 
+
     /**
     * Método controller para cadastrar um novo carro.
     * 
     * Esta função recebe uma requisição HTTP contendo os dados de um carro no corpo da requisição
-    * e tenta cadastrar este carro no banco de dados utilizando a função `cadastroCarro`. Caso o cadastro 
+    * e tenta cadastrar este carro no banco de dados utilizando a função cadastroCarro. Caso o cadastro 
     * seja bem-sucedido, retorna uma resposta HTTP 200 com uma mensagem de sucesso. Caso contrário, retorna
     * uma resposta HTTP 400 com uma mensagem de erro.
     * 
-    * @param {Request} req - Objeto de requisição HTTP, contendo o corpo com os dados do carro no formato `CarroDTO`.
+    * insere um carro no banco de dados.
+    * @param {Request} req - Objeto de requisição HTTP, contendo o corpo com os dados do carro no formato CarroDTO.
     * @param {Response} res - Objeto de resposta HTTP usado para retornar o status e a mensagem ao cliente.
     * @returns {Promise<Response>} - Retorna uma resposta HTTP com o status 200 em caso de sucesso, ou 400 em caso de erro.
     * 
@@ -83,6 +85,26 @@ export class CarroController extends Carro {
 
             // retorna uma mensagem de erro há quem chamou a mensagem
             return res.status(400).json({ mensagem: "Não foi possível cadastrar o carro. Entre em contato com o administrador do sistema." });
+        }
+    }
+
+    static async remover(req: Request, res: Response): Promise<Response> {
+        try {
+            const idCarro = parseInt(req.params.idCarro as string);
+
+            const repostaModelo = await Carro.removerCarro(idCarro);
+            
+         if(repostaModelo) {
+            return res.status(200).json({mensagem: "o carro foi removido com sucesso!"});
+         } else {
+            return res.status(400).json({ mensagem: "erro ao remover o carro.Entre em contato com o administrador do sistema."});
+         }
+        
+        } catch (error) {
+
+            console.log(`Erro ao remover um carro. ${error}`);
+
+            return res.status(400).json({mensagem: "Não foi possivel remeover o carro.Entre em contato com o administrador do sistema."});
         }
     }
 }
