@@ -34,7 +34,7 @@ router.delete("/delete/cliente/:idCliente", ClienteController.remover);
 // Rota para listar os pedidos
 router.get("/lista/pedidos", PedidoVendaController.todos);
 router.post("/lista/pedidos", PedidoVendaController.novo);
-
+router.delete("/delete/pedidos/:idCliente", PedidoVendaController.remover);
 
 
 // exportando as rotas
